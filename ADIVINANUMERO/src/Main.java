@@ -28,6 +28,7 @@ public class Main {
                 System.out.println("El numero que estas nuscando es mayor a "+numero);
             }
 
+
         }
         if(!gano){
             System.out.println("Perdiste el numero secreto es "+secreto);

@@ -1,14 +1,5 @@
 public class ValidarValor {
 
-    public boolean validarRango(int valor) {
-        if (valor >= 0) {
-            if (valor <= 20) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean validarIdPositivo(int id) {
         if (id > 0) {
             return true;
@@ -21,5 +12,14 @@ public class ValidarValor {
             return false;
         }
         return true;
+    }
+
+    public boolean validarPromedio(double promedio) {
+        if (promedio >= 0) {
+            if (promedio <= 10) {
+                return true;
+            }
+        }
+        return false;
     }
 }

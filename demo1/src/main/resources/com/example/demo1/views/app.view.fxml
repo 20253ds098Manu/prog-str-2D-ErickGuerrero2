@@ -7,14 +7,31 @@
    <children>
       <Label />
       <Label text="Listado de personas" />
-      <Label text="Nombre" />
-
-      <Label text="Email" />
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Nombre " />
+            <Label text="Email" GridPane.rowIndex="1" />
+            <TextField fx:id="textnombre" GridPane.columnIndex="1" />
+            <TextField fx:id="textemail" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Edad" GridPane.rowIndex="2" />
+            <TextField fx:id="textedad" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
       <Label />
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
             <Button mnemonicParsing="false" text="Recargar data" />
-            <Button mnemonicParsing="false" text="Agregar" />
+            <Button mnemonicParsing="false" onAction="#onAddPerson" text="Agregar" />
+            <Button mnemonicParsing="false" text="Actualizar" onAction="#onUpdate" />
          </children>
       </HBox>
       <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" />

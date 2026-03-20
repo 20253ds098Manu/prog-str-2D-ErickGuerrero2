@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +18,12 @@ public class AppController {
     private ListView<String> listView;
     @FXML
     private Label lblMsg;
+    @FXML
+    private TextField textnombre;
+    @FXML
+    private TextField textemail;
+    @FXML
+    private TextField textedad;
 
 
     @FXML
@@ -29,7 +36,58 @@ public class AppController {
         //Inicializar ListView
 
         loadFromFile();
+        listView.getSelectionModel().selectedItemProperty().addListener( (obs, oldValue, newValue)->{
+            loadDataToForms(newValue);
+                }
+
+        );
         listView.setItems(data);
+
+    }
+    @FXML
+    public void onAddPerson() throws IOException {
+        try {
+
+
+            String name = textnombre.getText();
+            String email = textemail.getText();
+            String edad = textedad.getText();
+            service.addPerson(name,email,edad);
+            lblMsg.setText("Persona agregada con exito ");
+            lblMsg.setStyle("-fx-text-fill: green");
+            textnombre.clear();
+            textemail.clear();
+            textedad.clear();
+            loadFromFile();
+        }catch (IOException e){
+            lblMsg.setText("Hubo un error ");
+            lblMsg.setStyle("-fx-text-fill: red");
+        }catch (IllegalArgumentException ex){
+            lblMsg.setText(ex.getMessage());
+            lblMsg.setStyle("-fx-text-fill: red");
+
+        }
+
+    }
+    @FXML
+    public void onUpdate(){
+        int index = listView.getSelectionModel().getSelectedIndex();
+        String name = textnombre.getText();
+        String email = textemail.getText();
+        String edad = textedad.getText();
+        try{
+            service.updatePerson(index,name,email,edad);
+            loadFromFile();
+            lblMsg.setText("Actualizacion correcta");
+            lblMsg.setStyle("-fx-text-fill: green");
+            textnombre.clear();
+            textemail.clear();
+            textedad.clear();
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }catch (IllegalArgumentException e){
+
+        }
     }
 
     private void loadFromFile(){
@@ -43,6 +101,12 @@ public class AppController {
             lblMsg.setStyle("-fx-text-fill: red");
         }
 
+    }
+    private void loadDataToForms(String item){
+        String[] parts = item.split("-");
+        textnombre.setText(parts[0]);
+        textemail.setText(parts[1]);
+        textedad.setText(parts[2]);
     }
 
 }

@@ -10,9 +10,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppController {
+
 
     @FXML
     private ListView<String> listView;
@@ -24,6 +26,8 @@ public class AppController {
     private TextField textemail;
     @FXML
     private TextField textedad;
+    @FXML
+    private TextField busqueda;
 
 
     @FXML
@@ -31,17 +35,42 @@ public class AppController {
 
     private PersonService service= new PersonService();
 
+    private void filtrarLista(String textoABuscar) {
+        List<String> filtrada = new ArrayList<>();
+
+      for(String fran : data){
+          String [] partesDelString = fran.split("-");
+          System.out.println(partesDelString[1]);
+          if(partesDelString[1].contains(textoABuscar)){
+              filtrada.add(fran);
+          }
+
+
+      }
+      data.setAll(filtrada);
+
+    }
+
     @FXML
     public void initialize(){ //se va a ejecutar el inicio, en cuanto se cargue el controller
         //Inicializar ListView
 
         loadFromFile();
+        busqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.isEmpty()) {
+                filtrarLista(newValue);
+            }else{
+                loadFromFile();
+            }
+        });
+
         listView.getSelectionModel().selectedItemProperty().addListener( (obs, oldValue, newValue)->{
             loadDataToForms(newValue);
                 }
 
         );
         listView.setItems(data);
+
 
     }
     @FXML
@@ -90,6 +119,23 @@ public class AppController {
         }
     }
 
+    @FXML
+    private void onDelete(){
+        int index = listView.getSelectionModel().getSelectedIndex();
+        try{
+            service.deletePerson(index);
+            loadFromFile();
+            lblMsg.setText("Persona eliminada correctamente");
+            lblMsg.setStyle("-fx-text-fill: green");
+            textnombre.clear();
+            textemail.clear();
+            textedad.clear();
+        }catch (IOException e){
+            lblMsg.setText("Hubo un error con el archivo en eliminar");
+            lblMsg.setStyle("-fx-text-fill: red");
+        }
+
+    }
     private void loadFromFile(){
         try{
             List<String> items = service.LoaddataForList();
@@ -107,6 +153,11 @@ public class AppController {
         textnombre.setText(parts[0]);
         textemail.setText(parts[1]);
         textedad.setText(parts[2]);
+    }
+    @FXML
+    private void onReload(){
+        loadFromFile();
+
     }
 
 }
